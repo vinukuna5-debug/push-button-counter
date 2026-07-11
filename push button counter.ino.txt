@@ -1,0 +1,38 @@
+// CODTECH Internship - Task 1: Push Button Counter with Debouncing
+
+const int buttonPin = 2;     // The pin number where the button is connected
+int counter = 0;             // Variable to count the number of button presses
+int buttonState = 0;         // Variable to store the current button state
+int lastButtonState = HIGH;  // Variable to store the previous button state
+
+void setup() {
+  // Using INPUT_PULLUP eliminates the need for an external resistor
+  pinMode(buttonPin, INPUT_PULLUP); 
+  
+  // Initialize serial communication to display output on laptop screen
+  Serial.begin(9600);               
+  Serial.println("--- Push Button Counter Ready ---");
+}
+
+void loop() {
+  // Read the current state of the button pin
+  buttonState = digitalRead(buttonPin);
+
+  // Compare the buttonState to its previous state
+  if (buttonState != lastButtonState) {
+    
+    // Check if the button is pressed (it becomes LOW due to INPUT_PULLUP)
+    if (buttonState == LOW) { 
+      counter++; // Increment the counter
+      Serial.print("Button Pressed! Total Count: ");
+      Serial.println(counter); // Display the count on the Serial Monitor
+    }
+    
+    // Crucial Task Requirement - DEBOUNCING DELAY
+    // Prevents false/multiple triggering from a single press
+    delay(50); 
+  }
+  
+  // Save the current state as the last state for the next loop
+  lastButtonState = buttonState;
+}
